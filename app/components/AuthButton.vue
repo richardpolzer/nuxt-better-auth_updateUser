@@ -1,5 +1,19 @@
 <script setup lang="ts">
-const { loggedIn, user, signIn, signOut, ready } = useUserSession()
+import type { DropdownMenuItem } from '@nuxt/ui'
+
+const { loggedIn, user, signOut, ready } = useUserSession()
+
+const items: DropdownMenuItem[] = [
+  {
+    label: 'Profile',
+    icon: 'i-lucide-user',
+    onSelect: () => navigateTo('/profile')
+  }, {
+    label: 'Log Out',
+    icon: 'i-lucide-log-out',
+    onSelect: () => signOut()
+  }
+]
 </script>
 
 <template>
@@ -10,18 +24,22 @@ const { loggedIn, user, signIn, signOut, ready } = useUserSession()
     >
       Loading
     </UButton>
-    <UButton
+    <UDropdownMenu
       v-if="ready && loggedIn"
-      :avatar="{ src: user?.image ?? undefined }"
-      :icon="user?.image ? undefined : 'lucide:log-out'"
-      @click="signOut()"
+      :items="items"
+      :ui="{ content: 'w-48' }"
     >
-      {{ user?.name }}
-    </UButton>
+      <UButton
+        :avatar="{ src: user?.image ?? undefined }"
+        :icon="user?.image ? undefined : 'lucide:log-out'"
+      >
+        {{ user?.name }}
+      </UButton>
+    </UDropdownMenu>
     <UButton
       v-if="ready && !loggedIn"
       icon="lucide:log-in"
-      @click="signIn.social({ provider: 'github' })"
+      @click="navigateTo('/login')"
     >
       Login
     </UButton>
