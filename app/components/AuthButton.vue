@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 
-const { loggedIn, user, signOut, ready } = useUserSession()
+const { loggedIn, user, signOut, signIn, ready } = useUserSession()
 
 const items: DropdownMenuItem[] = [
   {
@@ -39,7 +39,7 @@ const items: DropdownMenuItem[] = [
     <UButton
       v-if="ready && !loggedIn"
       icon="lucide:log-in"
-      @click="navigateTo('/login')"
+      @click="signIn.social({ provider: 'github' })"
     >
       Login
     </UButton>
